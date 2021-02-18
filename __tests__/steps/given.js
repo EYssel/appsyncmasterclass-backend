@@ -12,6 +12,7 @@ const a_random_user = () => {
   const email = `${firstName}-${lastName}-${suffix}@fakemail.com`;
 
   return {
+      password,
       name,
       email
   }
