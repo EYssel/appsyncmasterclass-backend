@@ -6,9 +6,10 @@
   "main": "index.js",
   "scripts": {
     "sls": "sls",
-    "exportEnv": "sls export-env",
-    "integration-test": "jest --verbose ./__tests__/test_cases/integration --silent",
-    "e2e-test": "jest --verbose ./__tests__/test_cases/e2e --silent"
+    "exportEnv": "sls export-env && sls manifest",
+    "test": "jest --verbose ./__tests__/test_cases/unit",
+    "integration-test": "jest --verbose ./__tests__/test_cases/integration",
+    "e2e-test": "jest --verbose ./__tests__/test_cases/e2e"
   },
   "repository": {
     "type": "git",
@@ -23,12 +24,17 @@
   "homepage": "https://github.com/EYssel/appsyncmasterclass-backend#readme",
   "devDependencies": {
     "@types/jest": "^26.0.20",
+    "amplify-appsync-simulator": "^1.25.2",
+    "amplify-velocity-template": "^1.4.3",
     "aws-sdk": "^2.845.0",
+    "axios": "^0.21.1",
     "dotenv": "^8.2.0",
+    "lodash": "^4.17.20",
     "serverless": "2.4.0",
     "serverless-appsync-plugin": "^1.6.0",
     "serverless-export-env": "^1.4.1",
-    "serverless-iam-roles-per-function": "^3.1.0"
+    "serverless-iam-roles-per-function": "^3.1.0",
+    "serverless-manifest-plugin": "^1.0.7"
   },
   "dependencies": {
     "chance": "^1.1.7",
