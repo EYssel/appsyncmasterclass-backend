@@ -5,7 +5,7 @@ const chance = require("chance").Chance();
 
 describe("When a user signs up", () => {
   it("The user profile should be saved in DynamoDB", async () => {
-    const { password, name, email } = given.a_random_user();
+    const { name, password, email } = given.a_random_user();
 
     const user = await when.a_user_signs_up(password, name, email);
 
