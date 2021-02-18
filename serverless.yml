@@ -53,7 +53,6 @@ resources:
           - Key: Name
             Value: users-table
 
-
     CognitoUserPool:
       Type: AWS::Cognito::UserPool
       Properties:
@@ -75,7 +74,7 @@ resources:
             Mutable: true
         LambdaConfig:
           PostConfirmation: !GetAtt ConfirmUserSignupLambdaFunction.Arn
-    
+
     UserPoolInvokeConfirmUserSignupLambdaPermission:
       Type: AWS::Lambda::Permission
       Properties:
