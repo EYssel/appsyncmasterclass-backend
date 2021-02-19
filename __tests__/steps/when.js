@@ -104,15 +104,14 @@ const a_user_signs_up = async (password, name, email) => {
 };
 
 const we_invoke_an_appsync_template = (templatePath, context) => {
-  const template = fs.readFileSync(templatePath, { encoding: "utf-8" });
-  const ast = velocityTemplate.parse(template);
+  const template = fs.readFileSync(templatePath, { encoding: 'utf-8' })
+  const ast = velocityTemplate.parse(template)
   const compiler = new velocityTemplate.Compile(ast, {
     valueMapper: velocityMapper.map,
-    escape: false,
-  });
-
-  return JSON.parse(compiler.render(context));
-};
+    escape: false
+  })
+  return JSON.parse(compiler.render(context))
+}
 
 const a_user_calls_getMyProfile = async (user) => {
   const getMyProfile = `query MyQuery {
@@ -275,6 +274,47 @@ const a_user_calls_getTweets = async (user, userId, limit, nextToken) => {
   return newTweet;
 };
 
+const a_user_calls_getMyTimeline = async (user, limit, nextToken) => {
+  const getMyTimeline = `query getMyTimeline($limit: Int!, $nextToken: String) {
+    getMyTimeline( imit: $limit, nextToken: $nextToken) {
+      nextToken
+      tweets {
+        id
+        createdAt
+        profile {
+          id
+          name
+          screenName
+        }
+
+        ... on Tweet {
+          text
+          replies
+          likes
+          retweets
+        }
+      }
+    }
+  }`;
+  const variables = {
+    userId,
+    limit,
+    nextToken,
+  };
+
+  const data = await GraphQL(
+    process.env.API_URL,
+    getMyTimeline,
+    variables,
+    user.accessToken
+  );
+  const result = data.getMyTimeline;
+
+  console.log(`[${user.username}] - fetched timeline`);
+
+  return result;
+};
+
 module.exports = {
   we_invoke_confirmUserSignup,
   a_user_signs_up,
@@ -286,4 +326,5 @@ module.exports = {
   we_invoke_tweet,
   a_user_calls_tweet,
   a_user_calls_getTweets,
+  a_user_calls_getMyTimeline
 };
