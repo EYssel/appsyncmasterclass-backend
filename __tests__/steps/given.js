@@ -37,7 +37,7 @@ const an_appsync_context = (identity, args) => {
   };
 };
 
-an_authenticated_user = async () => {
+const an_authenticated_user = async () => {
   const { name, email, password } = a_random_user();
 
   const cognito = new AWS.CognitoIdentityServiceProvider();

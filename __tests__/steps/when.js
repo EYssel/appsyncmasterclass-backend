@@ -31,6 +31,24 @@ const we_invoke_confirmUserSignup = async (username, name, email) => {
   await handler(event, context);
 };
 
+
+const we_invoke_getImageUploadUrl = async (username, extension, contentType) => {
+  const handler = require("../../functions/get-upload-url").handler;
+
+  const context = {};
+  const event = {
+    identity: {
+      username
+    },
+    arguments: {
+      extension,
+      contentType
+    }
+  };
+
+  return await handler(event, context);
+};
+
 const a_user_signs_up = async (password, name, email) => {
   const cognito = new AWS.CognitoIdentityServiceProvider();
 
@@ -110,9 +128,50 @@ const a_user_calls_getMyProfile = async (user) => {
   return profile
 };
 
+const a_user_calls_editMyProfile = async (user, input) => {
+  const editMyProfile = `mutation editMyProfile($input: ProfileInput!) {
+    editMyProfile(newProfile: $input) {
+      backgroundImageUrl
+      bio
+      birthdate
+      createdAt
+      followersCount
+      followingCount
+      id
+      imageUrl
+      likesCounts
+      location
+      name
+      screenName
+      tweetsCount
+      website
+    }
+  }`;
+
+  const variables = {
+    input
+  }
+
+  const data = await GraphQL(
+    process.env.API_URL,
+    editMyProfile,
+    variables,
+    user.accessToken
+  );
+  const profile = data.editMyProfile;
+
+  console.log(`[${user.username}] - edited profile`);
+
+  return profile
+};
+
+
+
 module.exports = {
   we_invoke_confirmUserSignup,
   a_user_signs_up,
   we_invoke_an_appsync_template,
   a_user_calls_getMyProfile,
+  a_user_calls_editMyProfile,
+  we_invoke_getImageUploadUrl
 };
