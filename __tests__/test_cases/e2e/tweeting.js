@@ -1,76 +1,76 @@
-require("dotenv").config();
-const given = require("../../steps/given");
-const then = require("../../steps/then");
-const when = require("../../steps/when");
-const chance = require("chance").Chance();
-const path = require("path");
+require('dotenv').config()
+const given = require('../../steps/given')
+const then = require('../../steps/then')
+const when = require('../../steps/when')
+const chance = require('chance').Chance()
 
-describe("Given an authenticated user", () => {
-  let user;
+describe('Given an authenticated user', () => {
+  let user
   beforeAll(async () => {
-    user = await given.an_authenticated_user();
-  });
+    user = await given.an_authenticated_user()
+  })
 
-  describe("When a user sends a tweet", () => {
-    let tweet;
-    const text = chance.string({ length: 16 });
+  describe('When he sends a tweet', () => {
+    let tweet
+    const text = chance.string({ length: 16 })
     beforeAll(async () => {
-      tweet = await when.a_user_calls_tweet(user, text);
-    });
+      tweet = await when.a_user_calls_tweet(user, text)
+    })
 
-    it("should return the new tweet", () => {
+    it('Should return the new tweet', () => {
       expect(tweet).toMatchObject({
         text,
         replies: 0,
         likes: 0,
         retweets: 0,
-      });
-    });
+        liked: false,
+      })
+    })
 
-    describe("When getTweets is called", () => {
-      let tweets, nextToken;
+    describe('When he calls getTweets', () => {
+      let tweets, nextToken
       beforeAll(async () => {
-        const result = await when.a_user_calls_getTweets(
-          user,
-          user.username,
-          25
-        );
-        (tweets = result.tweets), (nextToken = result.nextToken);
-      });
-      it("The user will see the new tweet when getTweets is called", () => {
-        expect(nextToken).toBe(null);
-        expect(tweets.length).toEqual(1);
-        expect(tweets[0]).toEqual(tweet);
-      });
+        const result = await when.a_user_calls_getTweets(user, user.username, 25)
+        tweets = result.tweets
+        nextToken = result.nextToken
+      })
 
-      it("Cannot ask for > 25 tweets when getTweets is called", async () => {
-        await expect(
-          when.a_user_calls_getTweets(user, user.username, 26)
-        ).rejects.toMatchObject({
-          message: expect.stringContaining("max limit is 25"),
-        });
-      });
-    });
+      it('He will see the new tweet in the tweets array', () => {
+        expect(nextToken).toBeNull()
+        expect(tweets.length).toEqual(1)
+        expect(tweets[0]).toEqual(tweet)
+      })
+  
+      it('He cannot ask for more than 25 tweets in a page', async () => {
+        await expect(when.a_user_calls_getTweets(user, user.username, 26))
+          .rejects
+          .toMatchObject({
+            message: expect.stringContaining('max limit is 25')
+          })
+      })
+    })
 
-    describe("When getMyTimeline is called", () => {
-      let tweets, nextToken;
+    describe('When he calls getMyTimeline', () => {
+      let tweets, nextToken
       beforeAll(async () => {
-        const result = await when.a_user_calls_getMyTimeline(user, 25);
-        (tweets = result.tweets), (nextToken = result.nextToken);
-      });
-      it("The user will see the new tweet when getTweets is called", () => {
-        expect(nextToken).toBe(null);
-        expect(tweets.length).toEqual(1);
-        expect(tweets[0]).toEqual(tweet);
-      });
+        const result = await when.a_user_calls_getMyTimeline(user, 25)
+        tweets = result.tweets
+        nextToken = result.nextToken
+      })
 
-      it("Cannot ask for > 25 tweets when getTweets is called", async () => {
-        await expect(
-          when.a_user_calls_getTweets(user, 26)
-        ).rejects.toMatchObject({
-          message: expect.stringContaining("max limit is 25"),
-        });
-      });
-    });
-  });
-});
+      it('He will see the new tweet in the tweets array', () => {
+        expect(nextToken).toBeNull()
+        expect(tweets.length).toEqual(1)
+        expect(tweets[0]).toEqual(tweet)
+      })
+  
+      it('He cannot ask for more than 25 tweets in a page', async () => {
+        await expect(when.a_user_calls_getMyTimeline(user, 26))
+          .rejects
+          .toMatchObject({
+            message: expect.stringContaining('max limit is 25')
+          })
+      })
+    })
+  })
+})
