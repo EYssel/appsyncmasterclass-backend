@@ -20,7 +20,7 @@ mappingTemplates:
     dataSource: tweetsTable
   - type: Query
     field: getMyTimeline
-    dataSource: tweetsTable
+    dataSource: timelinesTable
 
   - type: Mutation
     field: editMyProfile
@@ -43,10 +43,8 @@ mappingTemplates:
     dataSource: tweetsTable
 
 dataSources:
-  # DEFAULT
   - type: NONE
     name: none
-  # TABLES
   - type: AMAZON_DYNAMODB
     name: usersTable
     config:
@@ -67,16 +65,15 @@ dataSources:
     name: likeMutation
     config:
       tableName: !Ref LikesTable
-      iamRoleStatements: 
+      iamRoleStatements:
         - Effect: Allow
           Action: dynamodb:PutItem
           Resource: !GetAtt LikesTable.Arn
         - Effect: Allow
           Action: dynamodb:UpdateItem
-          Resource:
+          Resource: 
             - !GetAtt UsersTable.Arn
             - !GetAtt TweetsTable.Arn
-  # LAMBDA
   - type: AWS_LAMBDA
     name: getImageUploadUrlFunction
     config:

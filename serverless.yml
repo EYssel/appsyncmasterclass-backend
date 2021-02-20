@@ -152,7 +152,7 @@ resources:
           - Key: Environment
             Value: ${self:custom.stage}
           - Key: Name
-            Value: timelines-table
+            Value: likes-table
 
     CognitoUserPool:
       Type: AWS::Cognito::UserPool
