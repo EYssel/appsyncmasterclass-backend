@@ -20,8 +20,8 @@ fragment myProfileFields on MyProfile {
   followersCount
   followingCount
   tweetsCount
-  likesCounts
-  }
+  likesCounts  
+}
 `
 
 const otherProfileFragment = `
@@ -48,6 +48,7 @@ fragment iProfileFields on IProfile {
   ... on MyProfile {
     ... myProfileFields
   }
+
   ... on OtherProfile {
     ... otherProfileFields
   }
@@ -322,7 +323,7 @@ const a_user_calls_like = async (user, tweetId) => {
   const data = await GraphQL(process.env.API_URL, like, variables, user.accessToken)
   const result = data.like
 
-  console.log(`[${user.username}] - liked tweet ${tweetId}`)
+  console.log(`[${user.username}] - liked tweet [${tweetId}]`)
 
   return result
 }
@@ -338,13 +339,13 @@ const a_user_calls_unlike = async (user, tweetId) => {
   const data = await GraphQL(process.env.API_URL, unlike, variables, user.accessToken)
   const result = data.unlike
 
-  console.log(`[${user.username}] - unliked tweet ${tweetId}`)
+  console.log(`[${user.username}] - unliked tweet [${tweetId}]`)
 
   return result
 }
 
 const a_user_calls_getLikes = async (user, userId, limit, nextToken) => {
-  const getLikes = `mutation getLikes($userId: ID!, $limit: Int!, $nextToken: String) {
+  const getLikes = `query getLikes($userId: ID!, $limit: Int!, $nextToken: String) {
     getLikes(userId: $userId, limit: $limit, nextToken: $nextToken) {
       nextToken
       tweets {
