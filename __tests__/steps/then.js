@@ -75,7 +75,7 @@ const retweet_exists_in_TweetsTable = async (userId, tweetId) => {
   return retweet
 }
 
-const retweet_does_not_exists_in_TweetsTable = async (userId, tweetId) => {
+const retweet_does_not_exist_in_TweetsTable = async (userId, tweetId) => {
   const DynamoDB = new AWS.DynamoDB.DocumentClient()
 
   console.log(`looking for retweet of [${tweetId}] in table [${process.env.TWEETS_TABLE}]`)
@@ -112,7 +112,7 @@ const retweet_exists_in_RetweetsTable = async (userId, tweetId) => {
   return resp.Item
 }
 
-const retweet_does_not_exists_in_RetweetsTable = async (userId, tweetId) => {
+const retweet_does_not_exist_in_RetweetsTable = async (userId, tweetId) => {
   const DynamoDB = new AWS.DynamoDB.DocumentClient()
 
   console.log(`looking for retweet of [${tweetId}] for user [${userId}] in table [${process.env.RETWEETS_TABLE}]`)
@@ -192,9 +192,9 @@ module.exports = {
   tweet_exists_in_TweetsTable,
   tweet_exists_in_TimelinesTable,
   retweet_exists_in_TweetsTable,
-  retweet_does_not_exists_in_TweetsTable,
+  retweet_does_not_exist_in_TweetsTable,
   retweet_exists_in_RetweetsTable,
-  retweet_does_not_exists_in_RetweetsTable,
+  retweet_does_not_exist_in_RetweetsTable,
   there_are_N_tweets_in_TimelinesTable,
   user_can_upload_image_to_url,
   user_can_download_image_from
